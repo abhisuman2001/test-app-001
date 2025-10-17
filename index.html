@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hello, World!</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #22c55e;
+      --accent-contrast: #052e16;
+      --ring: #22c55e55;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(1200px 600px at 10% 10%, #1f2937 0%, var(--bg) 60%),
+                  radial-gradient(1000px 600px at 90% 90%, #0b1324 0%, var(--bg) 60%),
+                  var(--bg);
+      display: grid;
+      place-items: center;
+      padding: 2rem;
+    }
+    main {
+      width: 100%;
+      max-width: 720px;
+      background: linear-gradient(180deg, #0b1220aa, #0b1220aa), radial-gradient(1000px 600px at 50% 0%, #10213a, #0b1220 60%);
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow:
+        0 10px 30px rgba(0,0,0,0.45),
+        0 0 0 1px inset rgba(255,255,255,0.03);
+    }
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: 0.02em;
+      line-height: 1.1;
+      background: linear-gradient(90deg, #c7d2fe, #86efac, #a5b4fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    p {
+      margin: 0.25rem 0 1.5rem;
+      color: var(--muted);
+      max-width: 60ch;
+    }
+    .card {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #0b1220;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+    }
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+    button {
+      appearance: none;
+      border: none;
+      background: linear-gradient(180deg, #22c55e, #16a34a);
+      color: white;
+      font-weight: 700;
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(34,197,94,0.25), 0 0 0 1px inset rgba(255,255,255,0.12);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.2s ease;
+    }
+    button:focus-visible {
+      outline: none;
+      box-shadow: 0 8px 16px rgba(34,197,94,0.35),
+                  0 0 0 1px inset rgba(255,255,255,0.12),
+                  0 0 0 4px var(--ring);
+    }
+    button:hover { filter: brightness(1.03); transform: translateY(-1px); }
+    button:active { transform: translateY(0); filter: brightness(0.98); }
+    .secondary {
+      background: #0b1220;
+      color: var(--text);
+      border: 1px solid #1f2937;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .output {
+      margin-top: 0.75rem;
+      min-height: 1.5rem;
+      color: #86efac;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    footer {
+      margin-top: 1rem;
+      font-size: 0.875rem;
+      color: #76839a;
+    }
+    a { color: #93c5fd; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0);
+      white-space: nowrap; border: 0;
+    }
+  </style>
+</head>
+<body>
+  <main role="main" aria-labelledby="title">
+    <h1 id="title">Hello, World!</h1>
+    <p>Welcome to a minimal starter webpage. Click the button to see a friendly message.</p>
+
+    <div class="card" role="region" aria-labelledby="interact-title">
+      <div id="interact-title" class="sr-only">Interactive greeting</div>
+      <div class="actions">
+        <button id="greetBtn" type="button" aria-controls="message" aria-label="Show greeting">Say Hello</button>
+        <button id="clearBtn" type="button" class="secondary" aria-controls="message" aria-label="Clear message">Clear</button>
+      </div>
+      <div id="message" class="output" aria-live="polite"></div>
+    </div>
+
+    <footer>
+      This is a simple, static Hello World example. No build step required.
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      const greetBtn = document.getElementById('greetBtn');
+      const clearBtn = document.getElementById('clearBtn');
+      const output   = document.getElementById('message');
+
+      function greet() {
+        const now = new Date();
+        const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        output.textContent = `Hello from your browser at ${time}!`;
+      }
+
+      function clearMessage() {
+        output.textContent = '';
+      }
+
+      greetBtn.addEventListener('click', greet);
+      clearBtn.addEventListener('click', clearMessage);
+
+      // Respect users who prefer reduced motion
+      const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (mq.matches) {
+        document.querySelectorAll('button').forEach(btn => {
+          btn.style.transition = 'none';
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
